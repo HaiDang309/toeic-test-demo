@@ -14,25 +14,31 @@
         <input id="1" type="checkbox" value="part1" v-model="listening1" />
         <label for="1">Part 1 (6 questions)</label>
         <br />
-        <input id="2" type="checkbox" value="part2"  v-model="listening2" />
+        <input id="2" type="checkbox" value="part2" v-model="listening2" />
         <label for="2">Part 2 (25 questions)</label>
         <br />
-        <input id="3" type="checkbox" value="part3"  v-model="listening3" />
+        <input id="3" type="checkbox" value="part3" v-model="listening3" />
         <label for="3">Part 3 (39 questions)</label>
         <br />
-        <input checked="true" id="4" type="checkbox" value="part4"  v-model="listening4" />
+        <input
+          checked="true"
+          id="4"
+          type="checkbox"
+          value="part4"
+          v-model="listening4"
+        />
         <label for="4">Part 4 (30 questions)</label>
       </div>
 
       <h4>Reading:</h4>
       <div class="modal__reading-checkbox">
-        <input id="5" type="checkbox" value="part5"  v-model="reading1" />
+        <input id="5" type="checkbox" value="part5" v-model="reading1" />
         <label for="5">Part 5 (30 questions)</label>
         <br />
         <input id="6" type="checkbox" value="part6" v-model="reading2" />
         <label for="6">Part 6 (16 questions)</label>
         <br />
-        <input id="7" type="checkbox" value="part7"  v-model="reading3" />
+        <input id="7" type="checkbox" value="part7" v-model="reading3" />
         <label for="7">Part 7 (54 questions)</label>
       </div>
 
@@ -41,6 +47,7 @@
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
 export default {
   methods: {
     handleCloseModal() {
@@ -54,7 +61,6 @@ export default {
       this.reading1 = true;
       this.reading2 = true;
       this.reading3 = true;
-
     },
     handleCheckListening() {
       this.listening1 = true;
@@ -75,10 +81,28 @@ export default {
       this.reading3 = true;
     },
     handleChoosePart() {
-        this.checked = Array.from(document.querySelectorAll('.modal input[type="checkbox"]')).filter(item => item.checked);
-        this.$store.commit('checked', this.checked)
-        this.$emit('close');
-    }
+      this.checkedPart = Array.from(
+        document.querySelectorAll('.modal input[type="checkbox"]')
+      ).filter((item) => item.checked);
+      if (this.checkedPart.length === 0) {
+        alert("You have to choose at least 1 part!");
+        return;
+      }
+      this.$store.commit("checked", this.checkedPart);
+      this.$emit("close");
+    },
+  },
+  computed: {
+    ...mapState(["checked"]),
+  },
+  mounted() {
+    this.reading1 = this.checked.includes("part5");
+    this.reading2 = this.checked.includes("part6");
+    this.reading3 = this.checked.includes("part7");
+    this.listening1 = this.checked.includes("part1");
+    this.listening2 = this.checked.includes("part2");
+    this.listening3 = this.checked.includes("part3");
+    this.listening4 = this.checked.includes("part4");
   },
   data() {
     return {
@@ -89,9 +113,10 @@ export default {
       listening2: true,
       listening3: true,
       listening4: true,
-      checked: []
+
+      checkedPart: [],
     };
-  }
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -166,8 +191,7 @@ export default {
       color: #fff;
 
       text-transform: uppercase;
-  }
-
+    }
   }
 }
 </style>

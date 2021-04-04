@@ -13,7 +13,7 @@
     <div class="result">
       Result
       <br />
-      <span class="score"> {{ correct.length }} / 200</span>
+      <span class="score"> {{ getResult }} / 200</span>
 
       <button @click="handleDoAgain">Do again!</button>
     </div>
@@ -40,7 +40,11 @@ export default {
     Header,
   },
   computed: {
-    ...mapState(["checked", "correct"]),
+    ...mapState(["checked", "correct1","correct2","correct3","correct4","correct5","correct6","correct7", 'answer']),
+    getResult() {
+      let result = this.correct1.concat(this.correct2).concat(this.correct3).concat(this.correct4).concat(this.correct5).concat(this.correct6).concat(this.correct7).map(item => item.toString());
+      return Array.from(new Set(this.answer)).filter(item => result.includes(item)).length;
+    }
   },
   watch: {
     checked: function() {
@@ -139,7 +143,8 @@ export default {
       this.showResult = false;
     },
     handleDoAgain() {
-      window.location.reload();
+      this.showResult = false;
+      this.$store.commit('clearResult');
       window.scrollTo({
         top: 0,
         behavior: "smooth",
@@ -205,12 +210,6 @@ body {
     background: #ffe268;
 
     cursor: pointer;
-
-    transition: transform 0.5s ease-in;
-
-    &:hover {
-      transform: rotate(720deg);
-    }
   }
 
   .result {

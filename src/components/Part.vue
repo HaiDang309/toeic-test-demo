@@ -1,51 +1,104 @@
 <template lang="">
   <div class="part">
-    <h3>Part {{part}}</h3>
-    <p>{{direction}}</p>
+    <h3>Part {{ part }}</h3>
+    <p>{{ direction }}</p>
     <table class="part__table">
       <tr>
         <th>Questions</th>
         <th>Answers</th>
         <th>Correct</th>
       </tr>
-        <tr v-for="index in numOfQuestion" :key="index + start">
-            <td>
-                {{ index + start}}
-            </td>
-            <td>
-                <input :id="index" type="radio" :value="index.toString() + start" :name="index.toString() + start" />
-                <label :for='index'>A</label>
+      <tr v-for="index in numOfQuestion" :key="index + start">
+        <td>
+          {{ index + start }}
+        </td>
+        <td>
+          <input
+            :id="index + start"
+            type="radio"
+            :value="index + start + 'a'"
+            :name="index + start"
+            @change="handleChangeRadio($event)"
+          />
+          <label :for="index + start">A</label>
 
-                <input :id="index" type="radio" :value="index.toString() + start" :name="index.toString() + start" />
-                <label :for='index'>B</label>
+          <input
+            :id="index + start"
+            type="radio"
+            :value="index + start + 'b'"
+            :name="index + start"
+            @change="handleChangeRadio($event)"
+          />
+          <label :for="index + start">B</label>
 
-                <input :id="index" type="radio" :value="index.toString() + start" :name="index.toString() + start" />
-                <label :for='index'>C</label>
+          <input
+            :id="index + start"
+            type="radio"
+            :value="index + start + 'c'"
+            :name="index + start"
+            @change="handleChangeRadio($event)"
+          />
+          <label :for="index + start">C</label>
 
-                <input :id="index" type="radio" :value="index.toString() + start" :name="index.toString() + start" />
-                <label :for='index'>D</label>
-            </td>
-            <td>
-                <input type="checkbox" :value="index" v-model="correct" />
-            </td>
-        </tr>
+          <input
+            :id="index + start"
+            type="radio"
+            :value="index + start + 'd'"
+            :name="index + start"
+            @change="handleChangeRadio($event)"
+          />
+          <label :for="index + start">D</label>
+        </td>
+        <td>
+          <input type="checkbox" :value="index + start" v-model="correct" />
+        </td>
+      </tr>
     </table>
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
 export default {
-  props: ['part', 'direction', 'numOfQuestion', 'start'],
+  props: ["part", "direction", "numOfQuestion", "start"],
   data() {
     return {
-      correct: []
-    }
+      correct: [],
+      answer: [],
+    };
+  },
+  computed: {
+    ...mapState(["shouldClear"]),
   },
   watch: {
     correct: function() {
-      this.$store.commit('getCorrect', this.correct)
-    }
+      this.$store.commit("getCorrect" + this.part, this.correct);
+    },
+    shouldClear: function() {
+      const radios = Array.from(
+        document.querySelectorAll('.part__table input[type="radio"]')
+      );
+      const checkboxs = Array.from(
+        document.querySelectorAll('.part__table input[type="checkbox"]')
+      );
+      checkboxs.map((checkbox) => {
+        checkbox.checked = false;
+      });
+      radios.map((radio) => {
+        radio.checked = false;
+      });
+    },
   },
-
+  methods: {
+    handleChangeRadio(e) {
+      let realAnswer = e.target.value.split(/[a-z]/)[0];
+      if (this.answer.includes(realAnswer)) {
+        return;
+      } else {
+        this.answer.push(realAnswer);
+      }
+      this.$store.commit("getAnswer", this.answer);
+    },
+  },
 };
 </script>
 

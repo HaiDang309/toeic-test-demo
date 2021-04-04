@@ -31,18 +31,23 @@ export default {
   },
   watch: {
     min: function() {
+      clearInterval(this.timer)
       if (this.min === 120) {
         this.hour = "02";
+        this.minute = '00';
+        this.second = '00';
       }
 
       if (this.min === 75) {
         this.hour = "01";
         this.minute = "15";
+        this.second = '00';
       }
 
       if (this.min === 45) {
         this.hour = "00";
         this.minute = "45";
+        this.second = '00'
       }
     },
   },

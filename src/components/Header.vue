@@ -1,12 +1,11 @@
 <template lang="">
-    <div id="top"></div>
   <div class="header">
     <div class="header__left">
       <i @click="handleOpenDrawer" class="fas fa-cog"></i>
       |
       <button @click="this.$emit('submit')">Summary</button>
       |
-      <button @click="handleScrollToTop">Clear</button>
+      <button @click="handleClear">Clear</button>
     </div>
 
     <div class="header__right">
@@ -36,9 +35,8 @@ export default {
     handleCloseDrawer() {
       this.openDrawer = false;
     },
-    handleScrollToTop() {
-      document.querySelector("#top").scrollIntoView({ behavior: "smooth" });
-      window.location.reload();
+    handleClear() {
+      this.$store.commit('clearResult');
     },
   },
 };

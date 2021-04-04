@@ -13,14 +13,14 @@
                 {{ index + 6 }}
             </td>
             <td>
-                <input :id="index" type="radio" :value="index.toString()" :name="index.toString()" />
-                <label :for='index'>A</label>
+                <input id="a" type="radio" :value="index + 6 + 'a'" :name="index + 6" @change="handleChangeRadio($event)"/>
+                <label for='a'>A</label>
 
-                <input :id="index" type="radio" :value="index.toString()" :name="index.toString()" />
-                <label :for='index'>B</label>
+                <input id="b" type="radio" :value="index + 6 + 'b'" :name="index + 6" @change="handleChangeRadio($event)" />
+                <label for='b'>B</label>
 
-                <input :id="index" type="radio" :value="index.toString()" :name="index.toString()" />
-                <label :for='index'>C</label>
+                <input id="c" type="radio" :value="index + 6 + 'c'" :name="index + 6" @change="handleChangeRadio($event)" />
+                <label for='c'>C</label>
             </td>
             <td>
                 <input type="checkbox" :value="index + 6" v-model="correct">
@@ -30,18 +30,39 @@
   </div>
 </template>
 <script>
+import { mapState } from 'vuex';
 
 export default {
   data() {
     return {
-      correct: []
+      correct: [],
+      answer: []
     }
   },
+  computed: {
+    ...mapState(['shouldClear']),
+  },  
   watch: {
     correct: function() {
-      this.$store.commit('getCorrect', this.correct)
+      this.$store.commit('getCorrect2', this.correct)
+    },
+    shouldClear: function() {
+      if(this.shouldClear) {
+        this.correct = [];
+      }
     }
   },
+  methods: {
+    handleChangeRadio(e) {
+      let realAnswer = e.target.value.split('')[0];
+      if(this.answer.includes(realAnswer)) {
+        return;
+      } else {
+        this.answer.push(realAnswer)
+      }
+      this.$store.commit('getAnswer', this.answer)
+    } 
+  }
 };
 </script>
 
