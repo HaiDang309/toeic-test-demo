@@ -13,7 +13,7 @@
     <div class="result">
       Result
       <br />
-      <span class="score"> {{ getResult }} / 200</span>
+      <span class="score"> {{ getResult }} / {{ totalQuestion }}</span>
 
       <button @click="handleDoAgain">Do again!</button>
     </div>
@@ -48,6 +48,11 @@ export default {
   },
   watch: {
     checked: function() {
+      this.totalQuestion = 0;
+      this.checked.map(item => {
+        this.totalQuestion += mockTest[item].numOfQuestions
+      })
+
       if (this.checked.includes("part1")) {
         this.show1 = true;
       } else {
@@ -133,6 +138,8 @@ export default {
       mockTest: mockTest,
 
       showResult: false,
+
+      totalQuestion: 200,
     };
   },
   methods: {
