@@ -54,6 +54,14 @@ export default createStore({
     },
     clearResult(state) {
       state.shouldClear = !state.shouldClear;
+      state.answer = []
+      state.correct1 = []
+      state.correct2 = [];
+      state.correct3 = [];
+      state.correct4 = [];
+      state.correct5 = [];
+      state.correct6 = [];
+      state.correct7 = [];
     }
   },
   actions: {},

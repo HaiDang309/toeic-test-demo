@@ -1,68 +1,90 @@
 <template lang="">
   <div class="part">
     <h3>Part 2</h3>
-    <p>Directions: You will hear a question or statement and three responses spoken in English. They will not be printed in your test book and will be spoken only one time. Select the best response to the question or statement and mark the letter (A), (B), or (C) on your answer sheet.</p>
+    <p>
+      Directions: You will hear a question or statement and three responses
+      spoken in English. They will not be printed in your test book and will be
+      spoken only one time. Select the best response to the question or
+      statement and mark the letter (A), (B), or (C) on your answer sheet.
+    </p>
     <table class="part__table">
       <tr>
         <th>Questions</th>
         <th>Answers</th>
         <th>Correct</th>
       </tr>
-        <tr v-for="index in 25" :key="index">
-            <td>
-                {{ index + 6 }}
-            </td>
-            <td>
-                <input id="a" type="radio" :value="index + 6 + 'a'" :name="index + 6" @change="handleChangeRadio($event)"/>
-                <label for='a'>A</label>
+      <tr v-for="index in 25" :key="index">
+        <td>
+          {{ index + 6 }}
+        </td>
+        <td>
+          <input
+            id="a"
+            type="radio"
+            :value="index + 6 + 'a'"
+            :name="index + 6"
+            @change="handleChangeRadio($event)"
+          />
+          <label for="a">A</label>
 
-                <input id="b" type="radio" :value="index + 6 + 'b'" :name="index + 6" @change="handleChangeRadio($event)" />
-                <label for='b'>B</label>
+          <input
+            id="b"
+            type="radio"
+            :value="index + 6 + 'b'"
+            :name="index + 6"
+            @change="handleChangeRadio($event)"
+          />
+          <label for="b">B</label>
 
-                <input id="c" type="radio" :value="index + 6 + 'c'" :name="index + 6" @change="handleChangeRadio($event)" />
-                <label for='c'>C</label>
-            </td>
-            <td>
-                <input type="checkbox" :value="index + 6" v-model="correct">
-            </td>
-        </tr>
+          <input
+            id="c"
+            type="radio"
+            :value="index + 6 + 'c'"
+            :name="index + 6"
+            @change="handleChangeRadio($event)"
+          />
+          <label for="c">C</label>
+        </td>
+        <td>
+          <input type="checkbox" :value="index + 6" v-model="correct" />
+        </td>
+      </tr>
     </table>
   </div>
 </template>
 <script>
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
 
 export default {
   data() {
     return {
       correct: [],
-      answer: []
-    }
+      answer: [],
+    };
   },
   computed: {
-    ...mapState(['shouldClear']),
-  },  
+    ...mapState(["shouldClear"]),
+  },
   watch: {
     correct: function() {
-      this.$store.commit('getCorrect2', this.correct)
+      this.$store.commit("getCorrect2", this.correct);
     },
     shouldClear: function() {
-      if(this.shouldClear) {
-        this.correct = [];
-      }
-    }
+      this.correct = [];
+      this.answer = [];
+    },
   },
   methods: {
     handleChangeRadio(e) {
-      let realAnswer = e.target.value.split('')[0];
-      if(this.answer.includes(realAnswer)) {
+      let realAnswer = e.target.value.split("")[0];
+      if (this.answer.includes(realAnswer)) {
         return;
       } else {
-        this.answer.push(realAnswer)
+        this.answer.push(realAnswer);
       }
-      this.$store.commit('getAnswer', this.answer)
-    } 
-  }
+      this.$store.commit("getAnswer", this.answer);
+    },
+  },
 };
 </script>
 

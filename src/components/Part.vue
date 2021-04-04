@@ -86,6 +86,8 @@ export default {
       radios.map((radio) => {
         radio.checked = false;
       });
+      this.correct = [];
+      this.answer = [];
     },
   },
   methods: {
