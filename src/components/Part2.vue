@@ -76,7 +76,7 @@ export default {
   },
   methods: {
     handleChangeRadio(e) {
-      let realAnswer = e.target.value.split("")[0];
+      let realAnswer = e.target.value.split(/[a-z]/)[0];
       if (this.answer.includes(realAnswer)) {
         return;
       } else {
